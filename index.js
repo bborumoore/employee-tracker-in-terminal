@@ -1,7 +1,4 @@
 const inquirer = require("inquirer");
-const Employee = require('./classes/Employee.js');
-const Department = require('./classes/Department.js');
-const Role = require('./classes/Role.js');
 const connection = require('./config/connection.js');
 const { connect } = require("./config/connection.js");
 
@@ -116,17 +113,70 @@ const addDepartment = () => {
         message: "What is the Department Name?"
     })
     .then((answer) => {
-        query = `INSERT INTO department (name) VALUES (${answer.department})`
-        connect.query(query)
+        const query = `INSERT INTO department (name) VALUES ("${answer.department}")`
+        connection.query(query)
     })
+    .then((ele) => {
+        openPrompt();
+    });
+    
 }
 
 const addEmployee = () => {
-
+    inquirer.prompt([{
+        name: 'first_name',
+        type: 'input',
+        message: "What is the Employee's First Name?"
+    },
+    {
+        name: 'last_name',
+        type: 'input',
+        message: "What is the Employee's Last Name?"
+    },
+    {
+        name: 'role_id',
+        type: 'input',
+        message: "What is the Employee's role_id?"
+    },
+    {
+        name: 'manager_id',
+        type: 'input',
+        message: "What is the Employee's manager_id?"
+    }])
+    .then((answer) => {
+        let query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) `
+        query+= `VALUES ("${answer.first_name}", "${answer.last_name}", "${answer.role_id}", "${answer.manager_id}")`
+        connection.query(query)
+    })
+    .then((ele) => {
+        openPrompt();
+    });
 }
 
 const addRole = () => {
-
+    inquirer.prompt([{
+        name: 'title',
+        type: 'input',
+        message: "What is the Title?"
+    },
+    {
+        name: 'salary',
+        type: 'input',
+        message: "What is the Salary ($/year, no commas)?"
+    },
+    {
+        name: 'department_id',
+        type: 'input',
+        message: "What is this role's department_id?"
+    }])
+    .then((answer) => {
+        let query = `INSERT INTO role (title, salary, department_id) `
+        query+= `VALUES ("${answer.title}", "${answer.salary}", "${answer.department_id}")`
+        connection.query(query)
+    })
+    .then((ele) => {
+        openPrompt();
+    });
 }
 
 const updateRole = () => {
