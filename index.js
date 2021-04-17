@@ -22,7 +22,7 @@ const openPrompt = () => {
                 'Add a Department',
                 'Add an Employee',
                 'Add a Role',
-                'Update a role',
+                'Update a role for an employee',
                 'Exit Program',
             ],
         })
@@ -52,7 +52,7 @@ const openPrompt = () => {
                     addRole();
                     break;
 
-                case 'Update a role':
+                case 'Update a role for an employee':
                     updateRole();
                     break;
 
@@ -180,8 +180,25 @@ const addRole = () => {
 }
 
 const updateRole = () => {
+    inquirer.prompt([{
+        name: 'employee_id',
+        type: 'input',
+        message: "What Employee ID would you like to edit?"
+    },
+    {
+        name: 'role_id',
+        type: 'input',
+        message: "What the employee's new Role ID?"
+    }])
+    .then((answer) => {
+        let query = `UPDATE employee SET role_id='${answer.role_id}' WHERE id='${answer.employee_id}';`
+        connection.query(query)
+    })
+    .then((ele) => {
+        openPrompt();
+    });
+} 
 
-}
 
 const exitProgram = () => {
 connection.end();
